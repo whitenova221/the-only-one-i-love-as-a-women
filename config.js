@@ -1,40 +1,39 @@
 const CONFIG = {
   couple: {
-    name1: "Ms.Wang",
-    name2: "Mr.Qi",
-    connector: "和",
-    together: "在一起"
+    name1: "Ardia Yunita Devi ",
+    name2: "Defrian Aidi Ansyah",
+    connector: "\u2665",
+    together: "2026-09-29"
   },
-  memorialDate: "2017-12-25T00:00:00",
+  memorialDate: "2026-09-29T00:00:00",
   letter: {
     paragraph1: [
-      "哪天我老了，还跟和你热恋一样，",
-      "桌前给你发消息，",
-      "灯盏微黄，窗外风雨千墙，",
-      "半天酿出一句我想你了，",
-      "内心的原野，",
-      "时而流星追月，时而万马奔腾。"
+      "Sebetul nya aku ingin menulis syair untuk mu",
+      "Tetapi setiap kali aku berusaha menulis, aku selalu gagal",
+      "Karna yang dipikiran ku hanyalah kamu,",
+      "Kamu cantik karna aku mencintai mu,",
+      "Bukan karna dirimu cantik akun mencitai mu,",
+      "Aku mencintai mu karna aku mencintai mu。",
     ],
     paragraph2: [
-      "有时有月亮，",
-      "我就做一个九曲十八弯的梦，",
-      "每个转角都与你有关，",
-      "你对我笑了一下，",
-      "醒来我就发上一天呆。"
+      "Kuharap saat dirimu sedih, aku bisa menjadi pelipur lara mu,",
+      "Kuharap saat dirimu senang, aku bisa berada di samping mu,",
+      "Kuharap saat dirimu marah, aku bisa menjadi penenang mu,",
+      "Kuharap saat dirimu bahagia, aku bisa menjadi alasan mu。",
     ],
     paragraph3: [
-      "现在我在长满星星的夜里，",
-      "阶前红豆坠满枝，",
-      "醉过知酒浓，",
-      "无物抵相思。"
+      "Jika ada hal dari diriku yang membuat mu sedih, Kuharap kamu bisa jujur kepada ku,",
+      "Ku harap dirimu bisa jujur kepada ku, karna aku ingin menjadi orang yang terbaik untuk mu,",
+      "Jika ada yang tidak kamu suka dari diriku, Kuharap kamu bisa jujur kepada ku, aku siap berubah,",
+      "Dan kuharap dirimu juga sama。"
     ]
   },
-  time: {
-    prefix: "第 ",
-    day: "天",
-    hour: "小时",
-    minute: "分钟",
-    second: "秒"
+ time: {
+    prefix: "",
+    day: "hari",
+    hour: "jam",
+    minute: "menit",
+    second: "detik"
   },
   seedText: "Miss You"
 };

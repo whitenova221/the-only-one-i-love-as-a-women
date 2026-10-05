@@ -50,8 +50,8 @@ function startFrameLoop(step, interval = 16) {
 const AnimationConfig = {
   SCALE_FACTOR: 0.95,
   SEED_MOVE_SPEED: 2,
-  TREE_GROW_DELAY: 10,
-  FLOWER_BLOOM_COUNT: 2,
+  TREE_GROW_DELAY: 5,
+  FLOWER_BLOOM_COUNT: 4,
   FLOWER_BLOOM_DELAY: 10,
   TREE_SHIFT_X: 260,
   TREE_MOVE_DURATION: 1600,

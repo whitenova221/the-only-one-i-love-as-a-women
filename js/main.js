@@ -5,7 +5,7 @@
 function showLoveLetter() {
   const letter = document.getElementById("letter");
   const clockBox = document.getElementById("clock-box");
-  typewriter(letter);
+  typewriter(letter,60);
   clockBox.classList.add("clock-box--visible");
 }
 
