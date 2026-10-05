@@ -79,34 +79,108 @@ function getCanvasPoint(event, canvas) {
   );
 }
 
+function playBgm() {
+  const bgm = document.getElementById("bgm");
+  if (!bgm) return;
+
+  // Wake up Web Audio session on iOS/mobile if supported
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) {
+      if (!window._bgmAudioCtx) {
+        window._bgmAudioCtx = new AudioCtx();
+      }
+      if (window._bgmAudioCtx.state === "suspended") {
+        window._bgmAudioCtx.resume().catch(() => {});
+      }
+    }
+  } catch (err) {
+    // Ignore audio context errors
+  }
+
+  bgm.muted = false;
+  bgm.volume = 1.0;
+
+  const playPromise = bgm.play();
+  if (playPromise !== undefined) {
+    playPromise.catch((err) => {
+      console.warn("Audio autoplay blocked, will retry on next user tap:", err);
+      // Fallback: unlock and play on the next user tap anywhere on the screen
+      const retryPlay = () => {
+        bgm.muted = false;
+        bgm.volume = 1.0;
+        bgm.play().then(() => {
+          document.removeEventListener("touchstart", retryPlay);
+          document.removeEventListener("touchend", retryPlay);
+          document.removeEventListener("click", retryPlay);
+        }).catch(() => {});
+      };
+
+      document.addEventListener("touchstart", retryPlay, { passive: true });
+      document.addEventListener("touchend", retryPlay, { passive: true });
+      document.addEventListener("click", retryPlay);
+    });
+  }
+}
+
 async function waitForUserClick(seed, canvas) {
   return new Promise((resolve) => {
+    let started = false;
+    let touchStartedOnSeed = false;
+
     function onMove(e) {
       const point = getCanvasPoint(e, canvas);
       canvas.style.cursor = seed.hover(point.x, point.y) ? "pointer" : "default";
     }
 
-    function handler(e) {
+    function onTouchStart(e) {
       const point = getCanvasPoint(e, canvas);
       if (seed.hover(point.x, point.y)) {
-        if (e.cancelable) e.preventDefault();
+        touchStartedOnSeed = true;
+        // Prime/load the audio on touchstart
         const bgm = document.getElementById("bgm");
-        if (bgm) bgm.play().catch(() => {});
-        cleanup();
-        resolve();
+        if (bgm) bgm.load();
       }
     }
 
+    function onTouchEnd(e) {
+      const point = getCanvasPoint(e, canvas);
+      if (touchStartedOnSeed || seed.hover(point.x, point.y)) {
+        touchStartedOnSeed = false;
+        triggerStart(e);
+      }
+    }
+
+    function onClick(e) {
+      const point = getCanvasPoint(e, canvas);
+      if (seed.hover(point.x, point.y)) {
+        triggerStart(e);
+      }
+    }
+
+    function triggerStart(e) {
+      if (started) return;
+      started = true;
+
+      // Play music inside the user gesture (touchend/click)
+      playBgm();
+
+      cleanup();
+      resolve();
+    }
+
     function cleanup() {
-      canvas.removeEventListener("click", handler);
-      canvas.removeEventListener("touchstart", handler);
       canvas.removeEventListener("mousemove", onMove);
+      canvas.removeEventListener("touchstart", onTouchStart);
+      canvas.removeEventListener("touchend", onTouchEnd);
+      canvas.removeEventListener("click", onClick);
       canvas.style.cursor = "default";
     }
 
     canvas.addEventListener("mousemove", onMove);
-    canvas.addEventListener("click", handler);
-    canvas.addEventListener("touchstart", handler, { passive: false });
+    canvas.addEventListener("touchstart", onTouchStart, { passive: true });
+    canvas.addEventListener("touchend", onTouchEnd);
+    canvas.addEventListener("click", onClick);
   });
 }
 
