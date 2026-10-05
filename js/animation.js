@@ -14,10 +14,13 @@ async function runUntil(isDone, step, interval = 16) {
   let last = 0;
   while (!isDone()) {
     const now = await nextFrame();
-    if (now - last >= interval) {
+    const elapsed = last ? now - last : interval;
+    // Run multiple steps per frame to compensate for low frame rates
+    const stepsToRun = Math.max(1, Math.floor(elapsed / Math.max(interval, 1)));
+    for (let i = 0; i < stepsToRun && !isDone(); i++) {
       step();
-      last = now;
     }
+    last = now;
   }
 }
 
@@ -48,13 +51,13 @@ function startFrameLoop(step, interval = 16) {
 // ===========================
 
 const AnimationConfig = {
-  SCALE_FACTOR: 0.95,
-  SEED_MOVE_SPEED: 2,
+  SCALE_FACTOR: 0.93,
+  SEED_MOVE_SPEED: 4,
   TREE_GROW_DELAY: 5,
-  FLOWER_BLOOM_COUNT: 4,
-  FLOWER_BLOOM_DELAY: 10,
+  FLOWER_BLOOM_COUNT: 8,
+  FLOWER_BLOOM_DELAY: 8,
   TREE_SHIFT_X: 260,
-  TREE_MOVE_DURATION: 1600,
+  TREE_MOVE_DURATION: 1400,
   HEART_JUMP_INTERVAL: 25,
   MAX_FALLING_HEARTS: 4,
   FALLING_SPAWN_CHANCE: 0.22,
