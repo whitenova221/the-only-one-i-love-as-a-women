@@ -17,13 +17,11 @@ const CONFIG = {
     ],
     paragraph2: [
       "Kuharap saat dirimu sedih, aku bisa menjadi pelipur lara mu,",
-      "Kuharap saat dirimu senang, aku bisa berada di samping mu,",
       "Kuharap saat dirimu marah, aku bisa menjadi penenang mu,",
       "Kuharap saat dirimu bahagia, aku bisa menjadi alasan mu。",
     ],
     paragraph3: [
       "Jika ada hal dari diriku yang membuat mu sedih, Kuharap kamu bisa jujur kepada ku,",
-      "Ku harap dirimu bisa jujur kepada ku, karna aku ingin menjadi orang yang terbaik untuk mu,",
       "Jika ada yang tidak kamu suka dari diriku, Kuharap kamu bisa jujur kepada ku, aku siap berubah,",
       "Dan kuharap dirimu juga sama。"
     ]
