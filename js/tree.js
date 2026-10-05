@@ -158,9 +158,20 @@ class Seed {
   }
 
   hover(x, y) {
-    const dpr = window.devicePixelRatio || 1;
-    const pixel = this.tree.ctx.getImageData(x * dpr, y * dpr, 1, 1);
-    return pixel.data[3] === 255;
+    const { point, scale = 1 } = this.heart;
+    // Generous hitbox for easy clicking and tapping, especially on mobile devices
+    const heartRadius = Math.max(60, 50 * scale);
+    if (Math.hypot(x - point.x, y - point.y) <= heartRadius) {
+      return true;
+    }
+
+    // Bounding box covering the branch stem and seed text with padding
+    const minX = point.x - 45 * scale;
+    const maxX = point.x + 95 * scale;
+    const minY = point.y - 50 * scale;
+    const maxY = point.y + 50 * scale;
+
+    return x >= minX && x <= maxX && y >= minY && y <= maxY;
   }
 }
 

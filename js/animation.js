@@ -66,7 +66,9 @@ const AnimationConfig = {
 // ===========================
 
 function getCanvasPoint(event, canvas) {
-  const source = event.touches ? event.touches[0] : event;
+  const source = (event.touches && event.touches[0]) ||
+                 (event.changedTouches && event.changedTouches[0]) ||
+                 event;
   const rect = canvas.getBoundingClientRect();
   const dpr = window.devicePixelRatio || 1;
   const logicalWidth = canvas.width / dpr;
@@ -79,17 +81,30 @@ function getCanvasPoint(event, canvas) {
 
 async function waitForUserClick(seed, canvas) {
   return new Promise((resolve) => {
+    function onMove(e) {
+      const point = getCanvasPoint(e, canvas);
+      canvas.style.cursor = seed.hover(point.x, point.y) ? "pointer" : "default";
+    }
+
     function handler(e) {
-      if (e.type === "touchstart") e.preventDefault();
       const point = getCanvasPoint(e, canvas);
       if (seed.hover(point.x, point.y)) {
-        document.getElementById("bgm").play().catch(() => {});
-        canvas.removeEventListener("click", handler);
-        canvas.removeEventListener("touchstart", handler);
+        if (e.cancelable) e.preventDefault();
+        const bgm = document.getElementById("bgm");
+        if (bgm) bgm.play().catch(() => {});
+        cleanup();
         resolve();
       }
     }
 
+    function cleanup() {
+      canvas.removeEventListener("click", handler);
+      canvas.removeEventListener("touchstart", handler);
+      canvas.removeEventListener("mousemove", onMove);
+      canvas.style.cursor = "default";
+    }
+
+    canvas.addEventListener("mousemove", onMove);
     canvas.addEventListener("click", handler);
     canvas.addEventListener("touchstart", handler, { passive: false });
   });
